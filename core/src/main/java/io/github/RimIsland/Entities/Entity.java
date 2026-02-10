@@ -1,6 +1,9 @@
 package io.github.RimIsland.Entities;
 
 import com.badlogic.gdx.math.Vector2;
+import io.github.RimIsland.Tasks.Task;
+import io.github.RimIsland.Tasks.TaskStatus;
+
 import java.util.Stack;
 
 public abstract class Entity
@@ -10,7 +13,7 @@ public abstract class Entity
     protected Vector2 velocity;
 
     // main task stack set as an Integer for now while
-    protected Stack<Integer> tasks = new Stack<>();
+    protected Stack<Task> taskStack = new Stack<>();
 
 
     /**
@@ -22,6 +25,9 @@ public abstract class Entity
 
     // melee attack strength
     protected byte melee = 0;
+
+    // ranged attack strength
+    protected byte ranged = 0;
 
     // chance to make impulsive decision rather than assigned task
     protected byte impulsiveness = 0;
@@ -84,9 +90,7 @@ public abstract class Entity
         this.velocity = new Vector2().set(0,0);
     }
 
-    abstract void update(int deltaTime);
-
-    protected void move(int deltaTime)
+    public void move(int deltaTime)
     {
         this.position.add(this.velocity);
     }
@@ -100,12 +104,23 @@ public abstract class Entity
         }
     }
 
-    public void update() {
-        if (this.alive)
-        {
-            // Move along the path or complete the next frame of the current task
+    public void update(int deltaTime) {
+        if (!alive) return;
+
+        if (!taskStack.isEmpty()) {
+            Task current = taskStack.peek();
+            TaskStatus status = current.update(this, deltaTime);
+
+            if (status != TaskStatus.RUNNING) {
+                current.onEnd(this);
+                taskStack.pop();
+            }
+        } else {
+            decideNextTask();
         }
     }
+
+    abstract protected void decideNextTask();
 
     protected void die()
     {
