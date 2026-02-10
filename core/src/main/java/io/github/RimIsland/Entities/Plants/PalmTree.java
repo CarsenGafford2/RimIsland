@@ -11,6 +11,6 @@ public class PalmTree extends Entity {
 
     @Override
     protected void decideNextTask() {
-        
+
     }
 }

@@ -22,61 +22,61 @@ public abstract class Entity
      */
 
     // health, when it reaches 0 the entity dies
-    protected byte health = 100;
+    public byte health = 100;
 
     // melee attack strength
-    protected byte melee = 0;
+    public byte melee = 0;
 
     // ranged attack strength
-    protected byte ranged = 0;
+    public byte ranged = 0;
 
     // chance to make impulsive decision rather than assigned task
-    protected byte impulsiveness = 0;
+    public byte impulsiveness = 0;
 
     // resistance to mental breaks and addiction
-    protected byte willpower = 0;
+    public byte willpower = 0;
 
     // determines how much they prioritize themselved over others
-    protected byte ego = 0;
+    public byte ego = 0;
 
     // how much pain they can take before passing out or running from battle
-    protected byte painTolerance = 0;
+    public byte painTolerance = 0;
 
     // how much work they can endure before needing to rest
-    protected byte endurance = 0;
+    public byte endurance = 0;
 
     // determines their resistance to diseases and poisons
-    protected byte immunity = 0;
+    public byte immunity = 0;
 
     // how often they need to eat and how much they need to eat when they do
-    protected byte metabolism = 0;
+    public byte metabolism = 0;
 
     // how deep of a sleeper they are, determining what can wake them up
-    protected byte sleep = 0;
+    public byte sleep = 0;
 
     // their general social skills
-    protected byte charisma = 0;
+    public byte charisma = 0;
 
     // how aggressive they are
-    protected byte aggression = 0;
+    public byte aggression = 0;
 
     // how socially aware they are, determining how they insult others and how they react to insults
-    protected byte socialAwareness = 0;
+    public byte socialAwareness = 0;
 
     // how fast they can learn new skills
-    protected byte learning = 0;
+    public byte learning = 0;
 
     // how much they care about others and prisoners
-    protected byte compassion = 0;
+    public byte compassion = 0;
 
     // how loyal they are to others
-    protected byte loyalty = 0;
+    public byte loyalty = 0;
 
     // represents their mental state
-    protected byte sanity = 0;
+    public byte sanity = 0;
 
     // how prominent they are in the story - mad lib style
-    protected byte narrativeWeight = 0;
+    public byte narrativeWeight = 0;
 
     /**
      * END ENTITY STATS
