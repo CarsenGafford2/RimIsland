@@ -4,7 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.RimIsland.Tasks.Task;
 import io.github.RimIsland.Tasks.TaskStatus;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public abstract class Entity
 {
@@ -13,7 +14,7 @@ public abstract class Entity
     protected Vector2 velocity;
 
     // main task stack set as an Integer for now while
-    protected Stack<Task> taskStack = new Stack<>();
+    protected Deque<Task> taskStack = new ArrayDeque<>();
 
 
     /**
@@ -93,6 +94,22 @@ public abstract class Entity
     public void move(int deltaTime)
     {
         this.position.add(this.velocity);
+    }
+
+    public void pushTask(Task task) {
+        pushTask(task);
+        task.onStart(this);
+    }
+
+    protected void clearTasks() {
+        while (!taskStack.isEmpty()) {
+            taskStack.pop().onEnd(this);
+        }
+    }
+
+    protected void interruptWith(Task task) {
+        clearTasks();
+        pushTask(task);
     }
 
     public void damage(int amount)
