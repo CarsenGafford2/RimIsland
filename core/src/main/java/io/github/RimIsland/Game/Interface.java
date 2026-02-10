@@ -23,6 +23,9 @@ public class Interface {
 
     private List<Layer> layers = new ArrayList<>();
 
+    // UI WIDGETS AND ITEMS
+    private Debugging debugging;
+
     public void create()
     {
         // Ortho Camera
@@ -39,17 +42,18 @@ public class Interface {
         // PRIORITY BELOW
 
         // Debugging
-        Layer debugLayer = new Layer(batch, camera, 1);
+        Layer debugLayer = new Layer( 1);
         Debugging debugging = new Debugging(debugLayer);
         layers.add(debugLayer);
 
         // Random Placeholder
-        layers.add(new Layer(batch, camera, 2));
+        layers.add(new Layer(2));
         layers.sort(Comparator.comparingInt(Layer::getPriority));
     }
 
     public void render()
     {
+        debugging.update();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
