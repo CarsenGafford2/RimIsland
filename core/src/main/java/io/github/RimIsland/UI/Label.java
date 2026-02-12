@@ -3,29 +3,37 @@ package io.github.RimIsland.UI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import io.github.RimIsland.Cache.FontCache;
+import com.badlogic.gdx.utils.Align;
+import io.github.RimIsland.Cache.FontManager;
+import io.github.RimIsland.UI.Enums.Anchor;
 
 public class Label {
 
+    private BitmapFont font;
+    private BitmapFontCache cache;
     private int size = 8;
-    private int x;
-    private int y;
-    private Color color = Color.BLACK;
-    private String text;
+    private float x = 0;
+    private float y = 0;
+    private Anchor xAnchor = Anchor.LEFT;
+    private Anchor yAnchor = Anchor.TOP;
+    private int alignment = Align.topLeft;
+    private Color color = Color.WHITE;
+    private String text = "Placeholder";
     private String fontPath = "fonts/TitilliumWeb-Regular.ttf";
     private SpriteBatch batch;
 
-    public Label(String text)
+    public Label()
     {
-        this.text = text;
+        font = FontManager.get(fontPath, size);
+        cache = font.getCache();
     }
-
     public void setFont(String newFontName)
     {
         fontPath = "fonts/" + newFontName + ".ttf";
+        font = FontManager.get(fontPath, size);
+        cache = font.getCache();
     }
 
     public void setColor(Color color)
@@ -36,11 +44,18 @@ public class Label {
     public void setSize(int size)
     {
         this.size = size;
+        font = FontManager.get(fontPath, size);
+        cache = font.getCache();
     }
 
     public void setText(String newText)
     {
         text = newText;
+    }
+
+    public void setAlignment(int alignment)
+    {
+        this.alignment = alignment;
     }
 
     public void setBatch(SpriteBatch newBatch)
@@ -54,14 +69,53 @@ public class Label {
         this.y = y;
     }
 
+    public void setXAnchor(Anchor anchor)
+    {
+        this.xAnchor = anchor;
+    }
+
+    public void setYAnchor(Anchor anchor)
+    {
+        this.yAnchor = anchor;
+    }
+
+    public String getText()
+    {
+        return this.text;
+    }
+
     public void draw(SpriteBatch batch)
     {
-        BitmapFont font = FontCache.get(fontPath, size);
+        float drawX = x;
+        switch (xAnchor)
+        {
+            case LEFT:
+                break;
+            case CENTER:
+                drawX = (Gdx.graphics.getWidth() / 2f) + x;
+                break;
+            case RIGHT:
+                drawX = (Gdx.graphics.getWidth() - x);
+                break;
+        }
 
-        Color old = batch.getColor();
-        batch.setColor(color);
-        font.draw(batch, text, x, y);
-        batch.setColor(old);
+        float drawY = y;
+        switch (yAnchor)
+        {
+            case BOTTOM:
+                break;
+            case CENTER:
+                drawY = (Gdx.graphics.getHeight() / 2f) - y;
+                break;
+            case TOP:
+                drawY = (Gdx.graphics.getHeight() - y);
+                break;
+        }
+
+        cache.clear();
+        cache.setColor(color);
+        cache.setText(text, drawX, drawY, Gdx.graphics.getWidth(), alignment, false);
+        cache.draw(batch);
     }
 
 }

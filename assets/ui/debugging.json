@@ -1,0 +1,42 @@
+{
+  "debugging": {
+    "FPSLabel": {
+      "text": "FPS: 0.0",
+      "text-size": 20,
+      "text-color": "#00FF00",
+      "x": 10, "y": 35,
+      "bind": "fps"
+    },
+    "CPULabel": {
+      "text": "CPU: 0.0%",
+      "text-size": 20,
+      "text-color": "#00FF00",
+      "x": 10, "y": 10,
+      "bind": "cpu"
+    },
+    "Title": {
+      "text": "Rimworld",
+      "text-size": 32,
+      "x": 140, "y": 20,
+      "font": "Acme-Regular",
+      "x-anchor": "RIGHT",
+      "y-anchor": "TOP"
+    },
+    "QuitButton": {
+      "text": "Quit",
+      "text-size": 24,
+      "x": -24, "y": -20,
+      "font": "Acme-Regular",
+      "x-anchor": "CENTER",
+      "y-anchor": "CENTER"
+    },
+    "UnquitButton": {
+      "text": "Unquit",
+      "text-size": 24,
+      "x": -40, "y": -60,
+      "font": "Acme-Regular",
+      "x-anchor": "CENTER",
+      "y-anchor": "CENTER"
+    }
+  }
+}

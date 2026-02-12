@@ -1,6 +1,7 @@
 package io.github.RimIsland;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -22,8 +23,9 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
+        float delta = Gdx.graphics.getDeltaTime();
         game.render();
-        face.render();
+        face.render(delta);
     }
 
     @Override

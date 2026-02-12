@@ -8,39 +8,54 @@ import java.lang.management.ManagementFactory;
 public class Monitor {
 
     private final OperatingSystemMXBean osBean;
-    // CPU
-    private double processCpu;
-    private double systemCpu;
-    // FPS
-    private int frameRate;
+    private final int cores;
+
+    private long lastCpuTime;
+    private long lastSampleTime;
+
+    private double cachedCpu = 0;
+    private float sampleTimer = 0f;
 
     public Monitor()
     {
         osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        cores = osBean.getAvailableProcessors();
+
+        lastCpuTime = osBean.getProcessCpuTime();
+        lastSampleTime = System.nanoTime();
     }
 
-    // CPU
-    public String getProcessCpuLoad()
+    public void update(float delta)
     {
-        processCpu = osBean.getProcessCpuLoad();
-        return String.valueOf(processCpu);
+        sampleTimer += delta;
+
+        // sample 4 times per second
+        if(sampleTimer < 0.25f) return;
+        sampleTimer = 0f;
+
+        long nowCpu = osBean.getProcessCpuTime();
+        long nowTime = System.nanoTime();
+
+        long cpuDiff = nowCpu - lastCpuTime;
+        long timeDiff = nowTime - lastSampleTime;
+
+        lastCpuTime = nowCpu;
+        lastSampleTime = nowTime;
+
+        if(timeDiff <= 0) return;
+
+        double usage = (double) cpuDiff / (timeDiff * cores);
+        cachedCpu = Math.max(0, Math.min(usage * 100.0, 100.0));
     }
 
-    public String getSystemCpuLoad()
-    {
-        systemCpu = osBean.getSystemCpuLoad();
-        return String.valueOf(systemCpu);
-    }
-
+    // ---- READ ----
     public String getCpuPercent()
     {
-        return String.valueOf((float) processCpu * 100);
+        return String.format("%.1f%%", cachedCpu);
     }
 
-    // FPS
     public String getFrameRate()
     {
-        frameRate = Gdx.graphics.getFramesPerSecond();
-        return String.valueOf(frameRate);
+        return Integer.toString(Gdx.graphics.getFramesPerSecond());
     }
 }

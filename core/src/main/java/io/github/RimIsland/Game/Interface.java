@@ -1,15 +1,14 @@
 package io.github.RimIsland.Game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import io.github.RimIsland.Cache.FontCache;
+import io.github.RimIsland.Cache.FontManager;
 import io.github.RimIsland.UI.Debugging;
-import io.github.RimIsland.UI.Label;
 import io.github.RimIsland.UI.Layer;
+import io.github.RimIsland.UI.Utilities.UILoader;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,11 +22,19 @@ public class Interface {
 
     private List<Layer> layers = new ArrayList<>();
 
-    // UI WIDGETS AND ITEMS
+    // UI WIDGETS
     private Debugging debugging;
+
+    public Interface()
+    {
+
+    }
 
     public void create()
     {
+
+        // Load more when wanted
+
         // Ortho Camera
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -37,13 +44,13 @@ public class Interface {
         viewport = new ScreenViewport(camera);
         viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
+        // Batch
         batch = new SpriteBatch();
-
-        // PRIORITY BELOW
 
         // Debugging
         Layer debugLayer = new Layer( 1);
-        Debugging debugging = new Debugging(debugLayer);
+        UILoader.load("ui/debugging.json", "debugging", debugLayer);
+        debugging = new Debugging(debugLayer);
         layers.add(debugLayer);
 
         // Random Placeholder
@@ -51,9 +58,9 @@ public class Interface {
         layers.sort(Comparator.comparingInt(Layer::getPriority));
     }
 
-    public void render()
+    public void render(float delta)
     {
-        debugging.update();
+        debugging.update(delta);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -66,12 +73,14 @@ public class Interface {
 
     public void dispose()
     {
-        FontCache.dispose();
+        // FontCache.dispose(); Deprecated
+        FontManager.dispose();
         batch.dispose();
     }
 
     public void resize(int width, int height)
     {
         viewport.update(width, height, true);
+        //System.out.println(width + ", " + height);
     }
 }
