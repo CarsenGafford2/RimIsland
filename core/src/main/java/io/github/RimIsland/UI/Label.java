@@ -5,9 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import io.github.RimIsland.Cache.FontManager;
 import io.github.RimIsland.UI.Enums.Anchor;
+import io.github.RimIsland.UI.Graphics.NineTileDrawable;
+import io.github.RimIsland.UI.Utilities.TextureLoader;
 
 public class Label {
 
@@ -22,6 +25,7 @@ public class Label {
     private Color color = Color.WHITE;
     private String text = "Placeholder";
     private String fontPath = "fonts/TitilliumWeb-Regular.ttf";
+    private NineTileDrawable texture;
     private SpriteBatch batch;
 
     public Label()
@@ -77,6 +81,12 @@ public class Label {
     public void setYAnchor(Anchor anchor)
     {
         this.yAnchor = anchor;
+    }
+
+    public void setTexture()
+    {
+        Vector2 tempSize = new Vector2(128, 128);
+        this.texture = TextureLoader.loadNineTile("0", tempSize);
     }
 
     public String getText()

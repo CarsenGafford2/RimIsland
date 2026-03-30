@@ -2,18 +2,14 @@ package io.github.RimIsland.UI.Utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Colors;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import io.github.RimIsland.UI.Enums.Anchor;
-import io.github.RimIsland.UI.Enums.TextAlign;
 import io.github.RimIsland.UI.Exceptions.InvalidJsonValue;
 import io.github.RimIsland.UI.Layer;
 import io.github.RimIsland.UI.Label;
 
-public class UILoader
+public class JsonLoader
 {
 
     public static void load(String path, String section, Layer layer)

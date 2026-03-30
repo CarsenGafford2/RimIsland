@@ -2,13 +2,12 @@ package io.github.RimIsland.Game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.RimIsland.Cache.FontManager;
 import io.github.RimIsland.UI.Debugging;
 import io.github.RimIsland.UI.Layer;
-import io.github.RimIsland.UI.Utilities.UILoader;
+import io.github.RimIsland.UI.Utilities.JsonLoader;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -49,7 +48,7 @@ public class Interface {
 
         // Debugging
         Layer debugLayer = new Layer( 1);
-        UILoader.load("ui/debugging.json", "debugging", debugLayer);
+        JsonLoader.load("ui/debugging.json", "debugging", debugLayer);
         debugging = new Debugging(debugLayer);
         layers.add(debugLayer);
 
