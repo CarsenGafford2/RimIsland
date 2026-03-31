@@ -20,24 +20,25 @@ public class TextureLoader
     private TextureRegion[][] tileMap;
 
     /**
-     * Fetches a NineTileDrawable from loadedTexture.
+     * Fetches a {@link NineTileDrawable} from the loaded Texture Atlas.
      * @param id region fetched.
      * @param size size of fetched region.
      * @return region fetched with specified size.
      */
     public NineTileDrawable loadNineTile(int id, Vector2 size)
     {
-        // Updates Texture with current Path
         loadedTexture = getTexture();
 
-        // Checks if Texture exists
         if (loadedTexture == null)
             throw new RuntimeException("Missing texture: " + loadedPath);
 
-        // Sets up a multiarray of textures
         tileMap = new TextureRegion[3][3];
+        regionWeAreCutting = new TextureRegion(
+            loadedTexture
 
-        // Cuts the region into multiple slices, feeding it into a tileMap table
+
+            );
+
         for (int column = 0; column < 3; column++) {
             for (int row = 0; row < 3; row++)
             {
@@ -45,7 +46,6 @@ public class TextureLoader
             }
         }
 
-        // we feed the tileMap table into a NineTileDrawable
         return new NineTileDrawable(tileMap);
     }
 
@@ -57,11 +57,18 @@ public class TextureLoader
      */
     private TextureRegion cut(int col, int row)
     {
-        int x = regionWeAreCutting.getRegionX() + offsetX + col * (tileSize + spacing);
-
         // Inverted because LibGDX likes bottom left more than top left.
         int invertedRow = 2 - row;
-        int y = regionWeAreCutting.getRegionY() + offsetY + invertedRow * (tileSize + spacing);
+        int tileOffset = tileSize + spacing; // 4px + 1px;
+
+
+        int x = regionWeAreCutting.getRegionX()
+            + offsetX // atlas offset
+            + col * tileOffset; // index * offset
+
+        int y = regionWeAreCutting.getRegionY() +
+            offsetY + // atlas offset
+            invertedRow * tileOffset; // index * offset
 
         return new TextureRegion(regionWeAreCutting.getTexture(), x, y, tileSize, tileSize);
     }
@@ -75,18 +82,16 @@ public class TextureLoader
         if (Objects.equals(this.loadedPath, path))
         {
             System.err.println("WARNING: Path is already the given path!");
+            return;
         }
-        else
+
+        if (loadedTexture != null)
         {
-            try
-            {
-                this.loadedPath = path;
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
+            loadedTexture.dispose(); // counters memory leak
+            loadedTexture = null;
         }
+
+        this.loadedPath = path;
     }
 
     /**
@@ -95,6 +100,10 @@ public class TextureLoader
      */
     public Texture getTexture()
     {
-        return new Texture(Gdx.files.internal(loadedPath));
+        if (loadedTexture == null)
+        {
+            loadedTexture = new Texture(Gdx.files.internal(loadedPath));
+        }
+        return loadedTexture;
     }
 }

@@ -14,17 +14,23 @@ import java.util.HashMap;
  *
  * <ul>
  *     <li>{@link NineTileDrawable}</li>
- *     <li></li>
+ *     <li>Width</li>
+ *     <li>Height</li>
  * </ul>
+ *
+ * The drawable can be rendered using their cache ID
+ * This class overall improves performance.
+ * <br>
+ * <br>
+ * <b>This cache is global and static</b>
  */
 public class NineTileCache
 {
     private static SpriteCache cache = new SpriteCache();
     private static HashMap<Key, Integer> entries = new HashMap<>();
 
-
     /**
-     *
+     * Internal key class, uniquely identifies cached drawables.
      */
     private static class Key
     {
@@ -32,6 +38,12 @@ public class NineTileCache
         int width;
         int height;
 
+        /**
+         * Cache key
+         * @param drawable drawable instance
+         * @param width width of drawable
+         * @param height height of drawable
+         */
         Key(NineTileDrawable drawable, int width, int height)
         {
             this.drawable = drawable;
@@ -39,14 +51,25 @@ public class NineTileCache
             this.height = height;
         }
 
+        /**
+         * Compares key with another object
+         * @param object comparable object
+         * @return true, only if the object is identical, instance, width, and height.
+         */
         @Override
         public boolean equals(Object object)
         {
             if (!(object instanceof Key)) return false;
             Key key = (Key) object;
-            return key.drawable == drawable && key.width == width && key.height == height;
+            return key.drawable == drawable &&
+                key.width == width &&
+                key.height == height;
         }
 
+        /**
+         * Generates hashcode
+         * @return int made from drawable, width, and height.
+         */
         @Override
         public int hashCode()
         {
@@ -54,6 +77,17 @@ public class NineTileCache
         }
     }
 
+    /**
+     * Creates or retrieves a cached SpriteCache ID for a drawable.
+     *
+     * If the drawable with the specified dimensions is already cached, an existing ID will automatically be returned.
+     * Else, the drawable will be rendered into the {@link SpriteCache}.
+     *
+     * @param drawable drawable
+     * @param width width
+     * @param height height
+     * @return SpriteCache ID for this drawable configuration
+     */
     public static int get(NineTileDrawable drawable, int width, int height)
     {
         Key key = new Key(drawable, width, height);
@@ -69,6 +103,18 @@ public class NineTileCache
         return id;
     }
 
+    /**
+     * Draws a cached NineTileDrawable using {@link Batch}.
+     *
+     * Method fetches id, renders the id with parameters.
+     *
+     * @param batch UI batch used for rendering
+     * @param drawable drawable instance
+     * @param x x position
+     * @param y y position
+     * @param width width of drawable
+     * @param height height of drawable
+     */
     public static void draw(Batch batch, NineTileDrawable drawable, int x, int y, int width, int height)
     {
         int id = get(drawable, width, height);
@@ -77,6 +123,13 @@ public class NineTileCache
         cache.end();
     }
 
+    /**
+     * Clears all cached drawables.
+     *
+     * Removes all cached entries and clears {@link SpriteCache}
+     *
+     * Only if you REALLY need to reload assets.
+     */
     public static void clear()
     {
         cache.clear();
